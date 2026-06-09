@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Политика конфиденциальности — ТНР</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design Tokens ─────────────────────────────────────── */
+    :root {
+      --color-canvas:           #0a0a0a;
+      --color-surface-soft:     #121212;
+      --color-surface-card:     #1a1a1a;
+      --color-surface-elevated: #242424;
+      --color-primary:          #faff69;
+      --color-primary-active:   #e6eb52;
+      --color-on-primary:       #0a0a0a;
+      --color-on-dark:          #ffffff;
+      --color-body:             #cccccc;
+      --color-body-strong:      #e6e6e6;
+      --color-muted:            #888888;
+      --color-muted-soft:       #5a5a5a;
+      --color-hairline:         #2a2a2a;
+      --color-hairline-strong:  #3a3a3a;
+      --color-accent-emerald:   #22c55e;
+
+      --rounded-sm:   6px;
+      --rounded-md:   8px;
+      --rounded-lg:   12px;
+      --rounded-pill: 9999px;
+
+      --spacing-xs:      8px;
+      --spacing-sm:      12px;
+      --spacing-md:      16px;
+      --spacing-lg:      24px;
+      --spacing-xl:      32px;
+      --spacing-xxl:     48px;
+      --spacing-section: 96px;
+
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* ── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--color-canvas);
+      color: var(--color-body);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Top Nav ───────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 64px;
+      background: var(--color-canvas);
+      border-bottom: 1px solid var(--color-hairline);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--spacing-xl);
+    }
+
+    .nav-inner {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      text-decoration: none;
+    }
+
+    .nav-logo-mark {
+      width: 32px;
+      height: 32px;
+      background: var(--color-primary);
+      border-radius: var(--rounded-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-mark svg { width: 18px; height: 18px; }
+
+    .nav-logo-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-on-dark);
+      letter-spacing: -0.3px;
+    }
+
+    .nav-btn {
+      background: var(--color-primary);
+      color: var(--color-on-primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+      height: 40px;
+      border-radius: var(--rounded-md);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: background 0.15s;
+    }
+    .nav-btn:hover { background: var(--color-primary-active); }
+
+    /* ── Page Header ───────────────────────────────────────── */
+    .page-header {
+      padding: var(--spacing-section) var(--spacing-xl) 64px;
+      border-bottom: 1px solid var(--color-hairline);
+    }
+
+    .page-header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-hairline);
+      padding: 4px 12px;
+      border-radius: var(--rounded-pill);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent-emerald);
+    }
+
+    .page-title {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -2px;
+      color: var(--color-on-dark);
+      margin-bottom: var(--spacing-lg);
+      max-width: 720px;
+    }
+
+    .page-title span { color: var(--color-primary); }
+
+    .page-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-lg);
+      flex-wrap: wrap;
+    }
+
+    .page-meta-item {
+      font-size: 14px;
+      color: var(--color-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .page-meta-item strong {
+      color: var(--color-body-strong);
+      font-weight: 500;
+    }
+
+    /* ── Layout ────────────────────────────────────────────── */
+    .content-layout {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--spacing-section) var(--spacing-xl);
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    /* ── Sidebar TOC ───────────────────────────────────────── */
+    .sidebar {
+      position: sticky;
+      top: 88px;
+    }
+
+    .sidebar-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 8px 12px;
+      border-radius: var(--rounded-md);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-muted);
+      text-decoration: none;
+      transition: color 0.15s, background 0.15s;
+      line-height: 1.4;
+    }
+
+    .toc-list a:hover {
+      color: var(--color-body-strong);
+      background: var(--color-surface-card);
+    }
+
+    .toc-list a.active {
+      color: var(--color-on-dark);
+      background: var(--color-surface-card);
+    }
+
+    /* ── Article ───────────────────────────────────────────── */
+    .article {
+      min-width: 0;
+    }
+
+    .section-block {
+      padding-bottom: var(--spacing-section);
+      border-bottom: 1px solid var(--color-hairline);
+      margin-bottom: var(--spacing-section);
+    }
+
+    .section-block:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .section-number {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-primary);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -1px;
+      color: var(--color-on-dark);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .section-body p {
+      color: var(--color-body);
+      font-size: 16px;
+      line-height: 1.65;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .section-body p:last-child { margin-bottom: 0; }
+
+    .section-body strong {
+      color: var(--color-body-strong);
+      font-weight: 600;
+    }
+
+    /* Info card */
+    .info-card {
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-hairline);
+      border-radius: var(--rounded-lg);
+      padding: var(--spacing-xl);
+      margin: var(--spacing-xl) 0;
+    }
+
+    .info-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-on-dark);
+      margin-bottom: var(--spacing-md);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+
+    .info-card-title::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 16px;
+      background: var(--color-primary);
+      border-radius: 2px;
+    }
+
+    .data-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+
+    .data-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-sm);
+      font-size: 15px;
+      color: var(--color-body);
+      line-height: 1.5;
+    }
+
+    .data-list li::before {
+      content: '—';
+      color: var(--color-primary);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Contact card */
+    .contact-card {
+      background: var(--color-primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--spacing-xl);
+      margin-top: var(--spacing-xl);
+    }
+
+    .contact-card-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-on-primary);
+      letter-spacing: -0.3px;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .contact-card-body {
+      font-size: 15px;
+      color: var(--color-on-primary);
+      opacity: 0.75;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .contact-card-email {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      background: var(--color-on-primary);
+      color: var(--color-primary);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: var(--rounded-md);
+      text-decoration: none;
+      letter-spacing: -0.2px;
+    }
+
+    /* ── CTA Band ──────────────────────────────────────────── */
+    .cta-band {
+      background: var(--color-surface-soft);
+      border-top: 1px solid var(--color-hairline);
+      padding: 64px var(--spacing-xl);
+    }
+
+    .cta-band-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--spacing-xl);
+      flex-wrap: wrap;
+    }
+
+    .cta-band-text h2 {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: var(--color-on-dark);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .cta-band-text p {
+      font-size: 16px;
+      color: var(--color-muted);
+    }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .footer {
+      background: var(--color-canvas);
+      border-top: 1px solid var(--color-hairline);
+      padding: 64px var(--spacing-xl);
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--spacing-lg);
+    }
+
+    .footer-brand {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-on-dark);
+      letter-spacing: -0.3px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: var(--spacing-xl);
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 14px;
+      color: var(--color-muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover { color: var(--color-body); }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--color-muted-soft);
+      margin-top: var(--spacing-xl);
+    }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .content-layout {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xxl);
+      }
+      .sidebar { position: static; }
+    }
+
+    @media (max-width: 768px) {
+      .page-title { font-size: 36px; letter-spacing: -1.5px; }
+      .section-title { font-size: 24px; }
+      .content-layout { padding: var(--spacing-xxl) var(--spacing-lg); }
+      .page-header { padding: var(--spacing-xxl) var(--spacing-lg) var(--spacing-xl); }
+      .nav { padding: 0 var(--spacing-lg); }
+      .toc-list { flex-direction: row; flex-wrap: wrap; gap: var(--spacing-xs); }
+      .toc-list a { padding: 6px 10px; }
+      .sidebar { margin-bottom: var(--spacing-lg); }
+      .cta-band-inner { flex-direction: column; align-items: flex-start; }
+      .footer-inner { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="/">
+        <div class="nav-logo-mark">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="9" cy="9" r="3.5" fill="#0a0a0a"/>
+            <path d="M9 2L9 5M9 13L9 16M2 9L5 9M13 9L16 9" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="nav-logo-text">ТНР</span>
+      </a>
+      <a class="nav-btn" href="#">Начать играть</a>
+    </div>
+  </nav>
+
+  <!-- ── Page Header ── -->
+  <header class="page-header">
+    <div class="page-header-inner">
+      <div class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        Правовые документы
+      </div>
+      <h1 class="page-title">Политика<br/><span>конфиденциальности</span></h1>
+      <div class="page-meta">
+        <span class="page-meta-item">Дата вступления в силу: <strong>9 июня 2025</strong></span>
+        <span class="page-meta-item">Последнее обновление: <strong>9 июня 2025</strong></span>
+        <span class="page-meta-item">Версия: <strong>1.0</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Content Layout ── -->
+  <div class="content-layout">
+
+    <!-- Sidebar TOC -->
+    <aside class="sidebar">
+      <p class="sidebar-label">Содержание</p>
+      <ul class="toc-list">
+        <li><a href="#intro" class="active">Введение</a></li>
+        <li><a href="#data-collected">Какие данные мы собираем</a></li>
+        <li><a href="#why">Зачем мы их используем</a></li>
+        <li><a href="#sharing">Передача третьим лицам</a></li>
+        <li><a href="#storage">Хранение данных</a></li>
+        <li><a href="#rights">Ваши права</a></li>
+        <li><a href="#cookies">Cookies</a></li>
+        <li><a href="#minors">Дети и несовершеннолетние</a></li>
+        <li><a href="#changes">Изменения политики</a></li>
+        <li><a href="#contact">Контакты</a></li>
+      </ul>
+    </aside>
+
+    <!-- Article -->
+    <article class="article">
+
+      <!-- 01 Introduction -->
+      <div class="section-block" id="intro">
+        <p class="section-number">01</p>
+        <h2 class="section-title">Введение</h2>
+        <div class="section-body">
+          <p>
+            ТНР («мы», «нас», «наш») — это платформа для поиска партнёров по теннису,
+            бронирования кортов и организации игр. Мы уважаем вашу конфиденциальность
+            и берём на себя конкретные обязательства по защите ваших данных.
+          </p>
+          <p>
+            Настоящая политика объясняет, какие данные мы собираем, зачем это делаем
+            и как вы можете управлять своей информацией. Без лишней воды — только то,
+            что важно знать теннисисту, который хочет просто найти партнёра и сыграть.
+          </p>
+          <p>
+            Используя приложение ТНР, веб-сайт или Telegram-бот, вы соглашаетесь с условиями
+            этой политики. Если вы не согласны — пожалуйста, не используйте сервис.
+          </p>
+        </div>
+      </div>
+
+      <!-- 02 Data Collected -->
+      <div class="section-block" id="data-collected">
+        <p class="section-number">02</p>
+        <h2 class="section-title">Какие данные мы собираем</h2>
+        <div class="section-body">
+          <p>Мы собираем только то, что нужно для работы платформы.</p>
+
+          <div class="info-card">
+            <p class="info-card-title">Данные, которые вы даёте нам сами</p>
+            <ul class="data-list">
+              <li>Имя и контактные данные (email, номер телефона)</li>
+              <li>Уровень игры — рейтинг UTR, NTRP или самооценка</li>
+              <li>Предпочтения: любимые корты, время игры, покрытие</li>
+              <li>Фото профиля (по желанию)</li>
+              <li>История игр и статистика матчей</li>
+            </ul>
+          </div>
+
+          <div class="info-card">
+            <p class="info-card-title">Данные, которые собираются автоматически</p>
+            <ul class="data-list">
+              <li>Геолокация — для поиска ближайших кортов и партнёров (только при активном использовании)</li>
+              <li>Тип устройства, операционная система, версия приложения</li>
+              <li>Данные о сессии: время входа, просмотренные страницы, клики</li>
+              <li>IP-адрес</li>
+            </ul>
+          </div>
+
+          <div class="info-card">
+            <p class="info-card-title">Данные от третьих лиц</p>
+            <ul class="data-list">
+              <li>При авторизации через Google или Apple — базовый профиль из этих аккаунтов</li>
+              <li>Данные платёжной системы при бронировании корта (мы не храним реквизиты карт)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 Why -->
+      <div class="section-block" id="why">
+        <p class="section-number">03</p>
+        <h2 class="section-title">Зачем мы их используем</h2>
+        <div class="section-body">
+          <p>Каждая единица данных работает на конкретную цель:</p>
+          <div class="info-card">
+            <ul class="data-list">
+              <li><strong>Матчинг партнёров</strong> — подбираем игроков по уровню, локации и расписанию</li>
+              <li><strong>Бронирование кортов</strong> — показываем доступные слоты рядом с вами</li>
+              <li><strong>Уведомления</strong> — сообщаем о подтверждении игры, запросах от партнёров, изменениях брони</li>
+              <li><strong>Безопасность</strong> — защита аккаунта, предотвращение мошенничества</li>
+              <li><strong>Улучшение сервиса</strong> — анализ того, что работает хорошо, а что нет</li>
+              <li><strong>Связь</strong> — ответы на ваши вопросы и поддержка</li>
+            </ul>
+          </div>
+          <p>
+            Мы <strong>не используем</strong> ваши данные для продажи рекламы третьим лицам
+            и не строим рекламные профили.
+          </p>
+        </div>
+      </div>
+
+      <!-- 04 Sharing -->
+      <div class="section-block" id="sharing">
+        <p class="section-number">04</p>
+        <h2 class="section-title">Передача третьим лицам</h2>
+        <div class="section-body">
+          <p>Мы не продаём ваши данные. Передача возможна только в трёх случаях:</p>
+          <div class="info-card">
+            <ul class="data-list">
+              <li><strong>Партнёрские корты</strong> — передаём имя и контакт при подтверждённом бронировании</li>
+              <li><strong>Технические подрядчики</strong> — платёжные системы, облачная инфраструктура, аналитика. Все они работают по соглашениям о конфиденциальности</li>
+              <li><strong>Требование закона</strong> — если обязаны по судебному решению или запросу государственных органов</li>
+            </ul>
+          </div>
+          <p>
+            Другим игрокам в приложении видно только то, что вы сами разрешили показывать:
+            имя, уровень, предпочтения и фото. Ваш email и телефон другим пользователям недоступны.
+          </p>
+        </div>
+      </div>
+
+      <!-- 05 Storage -->
+      <div class="section-block" id="storage">
+        <p class="section-number">05</p>
+        <h2 class="section-title">Хранение данных</h2>
+        <div class="section-body">
+          <p>
+            Данные хранятся на серверах в России / ЕС в зависимости от вашего региона.
+            Мы используем шифрование при передаче (TLS 1.3) и хранении.
+          </p>
+          <p>
+            Срок хранения — пока у вас есть активный аккаунт. После удаления аккаунта
+            данные удаляются в течение <strong>30 дней</strong>, кроме информации, которую
+            мы обязаны хранить по закону (финансовые транзакции — до 5 лет).
+          </p>
+          <p>
+            Геолокация не хранится в истории — используется только в момент поиска
+            и не сохраняется на наших серверах.
+          </p>
+        </div>
+      </div>
+
+      <!-- 06 Rights -->
+      <div class="section-block" id="rights">
+        <p class="section-number">06</p>
+        <h2 class="section-title">Ваши права</h2>
+        <div class="section-body">
+          <p>Вы контролируете свои данные. В любой момент вы можете:</p>
+          <div class="info-card">
+            <ul class="data-list">
+              <li><strong>Просмотреть</strong> все данные, которые мы о вас храним</li>
+              <li><strong>Исправить</strong> неточную информацию в профиле</li>
+              <li><strong>Удалить</strong> аккаунт и все связанные данные</li>
+              <li><strong>Выгрузить</strong> копию своих данных в машиночитаемом формате</li>
+              <li><strong>Отозвать согласие</strong> на обработку — без штрафных санкций</li>
+              <li><strong>Отключить</strong> геолокацию в настройках приложения или ОС</li>
+            </ul>
+          </div>
+          <p>
+            Для большинства действий достаточно раздела «Настройки → Конфиденциальность»
+            в приложении. По сложным запросам — пишите нам напрямую.
+          </p>
+        </div>
+      </div>
+
+      <!-- 07 Cookies -->
+      <div class="section-block" id="cookies">
+        <p class="section-number">07</p>
+        <h2 class="section-title">Cookies</h2>
+        <div class="section-body">
+          <p>
+            На веб-версии мы используем cookies — небольшие файлы, которые помогают
+            сайту работать корректно.
+          </p>
+          <div class="info-card">
+            <ul class="data-list">
+              <li><strong>Необходимые</strong> — авторизация, сессия, базовые функции. Без них сайт не работает</li>
+              <li><strong>Аналитические</strong> — считаем посещаемость страниц. Используем анонимизированные данные</li>
+              <li><strong>Функциональные</strong> — запоминаем ваши настройки (язык, регион)</li>
+            </ul>
+          </div>
+          <p>
+            Рекламных cookies нет. Управляйте cookies в настройках браузера в любое время.
+          </p>
+        </div>
+      </div>
+
+      <!-- 08 Minors -->
+      <div class="section-block" id="minors">
+        <p class="section-number">08</p>
+        <h2 class="section-title">Дети и несовершеннолетние</h2>
+        <div class="section-body">
+          <p>
+            ТНР предназначен для пользователей <strong>от 14 лет</strong>. Пользователи
+            младше 14 лет могут использовать платформу только с явного согласия родителей
+            или законных представителей.
+          </p>
+          <p>
+            Если вам стало известно, что ребёнок до 14 лет зарегистрировался без согласия
+            родителей — сообщите нам, и мы удалим аккаунт в течение 72 часов.
+          </p>
+        </div>
+      </div>
+
+      <!-- 09 Changes -->
+      <div class="section-block" id="changes">
+        <p class="section-number">09</p>
+        <h2 class="section-title">Изменения политики</h2>
+        <div class="section-body">
+          <p>
+            Если мы существенно меняем политику конфиденциальности, вы получите
+            уведомление в приложении или по email <strong>не менее чем за 7 дней</strong>
+            до вступления изменений в силу.
+          </p>
+          <p>
+            Незначительные изменения (формулировки, ссылки, контакты) вступают в силу
+            сразу после публикации. Дата «Последнего обновления» вверху страницы
+            всегда актуальна.
+          </p>
+          <p>
+            Продолжая пользоваться ТНР после обновления — вы принимаете новую версию политики.
+          </p>
+        </div>
+      </div>
+
+      <!-- 10 Contact -->
+      <div class="section-block" id="contact">
+        <p class="section-number">10</p>
+        <h2 class="section-title">Контакты</h2>
+        <div class="section-body">
+          <p>Вопросы по конфиденциальности? Пишите напрямую — отвечаем быстро.</p>
+          <div class="contact-card">
+            <p class="contact-card-title">Команда ТНР</p>
+            <p class="contact-card-body">Ответим в течение 2 рабочих дней</p>
+            <a class="contact-card-email" href="mailto:privacy@tnr.app">
+              privacy@tnr.app
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </article>
+  </div>
+
+  <!-- ── CTA Band ── -->
+  <section class="cta-band">
+    <div class="cta-band-inner">
+      <div class="cta-band-text">
+        <h2>Готов к игре?</h2>
+        <p>Найди партнёра рядом за 2 минуты</p>
+      </div>
+      <a class="nav-btn" href="#">Начать играть →</a>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="footer-brand">ТНР</span>
+      <ul class="footer-links">
+        <li><a href="#">Главная</a></li>
+        <li><a href="#">О нас</a></li>
+        <li><a href="#">Политика конфиденциальности</a></li>
+        <li><a href="#">Условия использования</a></li>
+        <li><a href="#">Поддержка</a></li>
+      </ul>
+    </div>
+    <div class="footer-inner">
+      <p class="footer-copy">© 2025 ТНР. Все права защищены.</p>
+    </div>
+  </footer>
+
+  <!-- ── Sidebar active state on scroll ── -->
+  <script>
+    const sections = document.querySelectorAll('.section-block[id]');
+    const tocLinks = document.querySelectorAll('.toc-list a');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>
