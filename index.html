@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -8,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 /* ============================================
    ДИЗАЙН-ТОКЕНЫ (по design code проекта)
@@ -265,55 +267,182 @@ ul { list-style: none; }
   flex-wrap: wrap;
 }
 
-/* Code-window-card как Hero artifact */
-.code-card {
+/* Map card как Hero artifact */
+.map-card {
   background: var(--color-surface-card);
   border: 1px solid var(--color-hairline);
   border-radius: var(--radius-lg);
   padding: 0;
   overflow: hidden;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  line-height: 1.7;
+  position: relative;
 }
-.code-card-header {
+.map-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--space-sm) var(--space-md);
   border-bottom: 1px solid var(--color-hairline);
   background: var(--color-surface-soft);
+  position: relative;
+  z-index: 401;
 }
-.code-dots { display: flex; gap: 6px; }
-.code-dots span {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: var(--color-hairline-strong);
-}
-.code-dots span:nth-child(1) { background: #ef4444; }
-.code-dots span:nth-child(2) { background: #faff69; }
-.code-dots span:nth-child(3) { background: #22c55e; }
-.code-card-title {
-  font-size: 12px;
-  color: var(--color-muted);
-  font-family: var(--font-sans);
-  letter-spacing: 0.3px;
-}
-.code-body {
-  padding: var(--space-lg);
-  color: var(--color-body);
-  font-size: 13.5px;
-}
-.code-line { display: block; }
-.code-key { color: #faff69; }
-.code-str { color: var(--color-on-dark); }
-.code-num { color: #22c55e; }
-.code-bool-true { color: #22c55e; }
-.code-bool-false { color: #ef4444; }
-.code-comment { color: var(--color-muted-soft); }
-.code-card-footer {
+.map-card-title {
   display: flex;
   align-items: center;
+  gap: var(--space-xs);
+  font-size: 13px;
+  color: var(--color-on-dark);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+.map-card-title svg { width: 14px; height: 14px; color: var(--color-primary); }
+.map-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  padding: 4px 10px;
+  background: rgba(250, 255, 105, 0.08);
+  border: 1px solid rgba(250, 255, 105, 0.25);
+  border-radius: var(--radius-pill);
+}
+.map-card-badge .pulse-dot {
+  width: 6px; height: 6px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--color-primary);
+  animation: pulse 2s ease-in-out infinite;
+}
+.map-canvas {
+  height: 440px;
+  width: 100%;
+  background: #0a0a0a;
+}
+/* Leaflet dark overrides */
+.leaflet-container {
+  background: #0a0a0a !important;
+  font-family: var(--font-sans) !important;
+  outline: none;
+}
+.leaflet-control-attribution {
+  background: rgba(10, 10, 10, 0.75) !important;
+  color: var(--color-muted-soft) !important;
+  font-size: 10px !important;
+  padding: 2px 6px !important;
+  border-radius: var(--radius-xs) !important;
+}
+.leaflet-control-attribution a {
+  color: var(--color-muted) !important;
+}
+.leaflet-control-zoom a {
+  background: var(--color-surface-card) !important;
+  color: var(--color-on-dark) !important;
+  border: 1px solid var(--color-hairline) !important;
+  border-radius: var(--radius-sm) !important;
+  width: 30px !important;
+  height: 30px !important;
+  line-height: 28px !important;
+  font-weight: 600 !important;
+}
+.leaflet-control-zoom a:hover {
+  background: var(--color-surface-elevated) !important;
+  color: var(--color-primary) !important;
+}
+.leaflet-control-zoom { border: none !important; box-shadow: none !important; }
+.leaflet-control-zoom a:first-child { margin-bottom: 4px !important; }
+
+/* Кастомный маркер */
+.court-marker {
+  width: 32px;
+  height: 32px;
+  background: var(--color-primary);
+  border: 3px solid #0a0a0a;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(250, 255, 105, 0.4), 0 0 0 1px rgba(250, 255, 105, 0.2);
+  cursor: pointer;
+  transition: transform .2s ease;
+}
+.court-marker:hover { transform: scale(1.15); }
+.court-marker.wall {
+  background: var(--color-surface-card);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+
+/* Popup в фирменном стиле */
+.leaflet-popup-content-wrapper {
+  background: var(--color-surface-card) !important;
+  color: var(--color-on-dark) !important;
+  border: 1px solid var(--color-hairline) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6) !important;
+  padding: 0 !important;
+}
+.leaflet-popup-content {
+  margin: var(--space-md) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  min-width: 200px;
+}
+.leaflet-popup-tip {
+  background: var(--color-surface-card) !important;
+  border: 1px solid var(--color-hairline) !important;
+}
+.leaflet-popup-close-button {
+  color: var(--color-muted) !important;
+  font-size: 18px !important;
+  padding: 8px !important;
+}
+.leaflet-popup-close-button:hover { color: var(--color-on-dark) !important; }
+
+.popup-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-on-dark);
+  margin-bottom: 6px;
+  padding-right: 16px;
+}
+.popup-meta {
+  font-size: 12px;
+  color: var(--color-muted);
+  margin-bottom: 8px;
+}
+.popup-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+.popup-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  color: var(--color-body);
+}
+.popup-tag.yellow {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+}
+
+.map-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: var(--space-sm);
   padding: var(--space-sm) var(--space-md);
   border-top: 1px solid var(--color-hairline);
@@ -321,6 +450,25 @@ ul { list-style: none; }
   font-family: var(--font-sans);
   font-size: 12px;
   color: var(--color-muted);
+}
+.map-card-footer .legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+.map-card-footer .legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.legend-dot.court { background: var(--color-primary); }
+.legend-dot.wall {
+  background: var(--color-surface-card);
+  border: 1.5px solid var(--color-primary);
 }
 .status-dot {
   width: 8px; height: 8px;
@@ -877,27 +1025,31 @@ section { padding: var(--space-section) 0; }
       </div>
     </div>
 
-    <!-- Code-window-card как hero artifact -->
-    <div class="code-card">
-      <div class="code-card-header">
-        <div class="code-dots"><span></span><span></span><span></span></div>
-        <div class="code-card-title">court_nearest.json</div>
+    <!-- Map card как hero artifact -->
+    <div class="map-card">
+      <div class="map-card-header">
+        <div class="map-card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/>
+            <circle cx="12" cy="9" r="2.5"/>
+          </svg>
+          <span>Карта района · Алматы</span>
+        </div>
+        <div class="map-card-badge">
+          <span class="pulse-dot"></span>
+          <span>Live</span>
+        </div>
       </div>
-      <pre class="code-body"><code><span class="code-line"><span class="code-comment">// 320 м от тебя · открыто сейчас</span></span>
-<span class="code-line">{</span>
-<span class="code-line">  <span class="code-key">"name"</span>: <span class="code-str">"Школа №1234, корт во дворе"</span>,</span>
-<span class="code-line">  <span class="code-key">"type"</span>: <span class="code-str">"court"</span>,</span>
-<span class="code-line">  <span class="code-key">"district"</span>: <span class="code-str">"Алмалинский"</span>,</span>
-<span class="code-line">  <span class="code-key">"surface"</span>: <span class="code-str">"хард"</span>,</span>
-<span class="code-line">  <span class="code-key">"lighting"</span>: <span class="code-bool-true">true</span>,</span>
-<span class="code-line">  <span class="code-key">"net"</span>: <span class="code-bool-true">true</span>,</span>
-<span class="code-line">  <span class="code-key">"price"</span>: <span class="code-num">0</span>,</span>
-<span class="code-line">  <span class="code-key">"wall_nearby"</span>: <span class="code-bool-true">true</span>,</span>
-<span class="code-line">  <span class="code-key">"busy_now"</span>: <span class="code-bool-false">false</span></span>
-<span class="code-line">}</span></code></pre>
-      <div class="code-card-footer">
-        <span class="status-dot"></span>
-        <span>Свободно прямо сейчас · обновлено 4 мин назад</span>
+      <div id="map" class="map-canvas"></div>
+      <div class="map-card-footer">
+        <div class="legend">
+          <span class="legend-item"><span class="legend-dot court"></span>Корт</span>
+          <span class="legend-item"><span class="legend-dot wall"></span>Стенка</span>
+        </div>
+        <span style="display:inline-flex;align-items:center;gap:6px;">
+          <span class="status-dot"></span>
+          <span>Обновлено только что</span>
+        </span>
       </div>
     </div>
   </div>
@@ -1036,93 +1188,40 @@ section { padding: var(--space-section) 0; }
       <form class="form-card" id="addCourtForm" novalidate>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Название места <span class="req">*</span></label>
+            <label class="form-label">Что это за место <span class="req">*</span></label>
             <input type="text" name="name" class="form-input" placeholder="Например: Корт у школы №47" required>
           </div>
         </div>
 
-        <div class="form-row two-col">
+        <div class="form-row">
           <div class="form-group">
             <label class="form-label">Тип <span class="req">*</span></label>
             <select name="type" class="form-select" required>
-              <option value="court">Корт</option>
-              <option value="wall">Стенка</option>
-              <option value="both">И корт, и стенка</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Покрытие</label>
-            <select name="surface" class="form-select">
-              <option value="">Не знаю / неважно</option>
-              <option value="hard">Хард</option>
-              <option value="clay">Грунт</option>
-              <option value="synthetic">Синтетика</option>
-              <option value="concrete">Бетон / асфальт</option>
+              <option value="court">🎾 Корт</option>
+              <option value="wall">🧱 Стенка</option>
+              <option value="both">Корт + стенка рядом</option>
             </select>
           </div>
         </div>
 
-        <div class="form-row two-col">
+        <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Район <span class="req">*</span></label>
-            <input type="text" name="district" class="form-input" placeholder="Например: Бостандыкский" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Город</label>
-            <input type="text" name="city" class="form-input" placeholder="Алматы" value="">
+            <label class="form-label">Где это <span class="req">*</span></label>
+            <input type="text" name="address" class="form-input" placeholder="Город, район, адрес или ориентир" required>
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Адрес или ориентир <span class="req">*</span></label>
-            <input type="text" name="address" class="form-input" placeholder="ул. Достык 15, во дворе школы" required>
+            <label class="form-label">Что важно знать <span style="color:var(--color-muted-soft);font-weight:400;">— опционально</span></label>
+            <textarea name="comment" class="form-textarea" placeholder="Бесплатно или платно, есть ли освещение, сетка, часы доступа, как пройти..."></textarea>
           </div>
         </div>
 
         <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Что есть на месте</label>
-            <div class="checks-grid">
-              <label class="check-pill">
-                <input type="checkbox" name="features" value="lighting">
-                <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
-                <span>Освещение</span>
-              </label>
-              <label class="check-pill">
-                <input type="checkbox" name="features" value="net">
-                <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
-                <span>Сетка</span>
-              </label>
-              <label class="check-pill">
-                <input type="checkbox" name="features" value="free">
-                <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
-                <span>Бесплатно</span>
-              </label>
-              <label class="check-pill">
-                <input type="checkbox" name="features" value="wall">
-                <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
-                <span>Есть стенка</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Комментарий</label>
-            <textarea name="comment" class="form-textarea" placeholder="Часы доступа, особенности, как пройти..."></textarea>
-          </div>
-        </div>
-
-        <div class="form-row two-col">
           <div class="form-group">
             <label class="form-label">Твой Telegram <span class="req">*</span></label>
-            <input type="text" name="telegram" class="form-input" placeholder="@username" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Имя</label>
-            <input type="text" name="author" class="form-input" placeholder="Как тебя зовут">
+            <input type="text" name="telegram" class="form-input" placeholder="@username — напишем, если есть вопросы" required>
           </div>
         </div>
 
@@ -1212,31 +1311,80 @@ section { padding: var(--space-section) 0; }
   Открыть в Telegram
 </a>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 /* ============================================
-   АРХИТЕКТУРА: единая модель данных
-   Этот объект — основа для:
-   - Лендинга (как сейчас)
-   - Telegram-бота
-   - Мобильного приложения
-   - Админ-панели модерации
+   ⚙️ TELEGRAM — ВСТАВЬ СВОИ ЗНАЧЕНИЯ
+   ============================================
+   Получить токен:    @BotFather → /newbot
+   Получить chat_id:  @userinfobot → Start
    ============================================ */
-const CourtSchema = {
-  id: 'string (uuid)',
-  name: 'string',
-  type: 'court | wall | both',
-  surface: 'hard | clay | synthetic | concrete | null',
-  district: 'string',
-  city: 'string',
-  address: 'string',
-  lat: 'number | null',
-  lng: 'number | null',
-  features: 'string[] (lighting, net, free, wall)',
-  comment: 'string',
-  status: 'pending | approved | rejected',
-  added_by: { telegram: 'string', name: 'string' },
-  created_at: 'ISO timestamp'
-};
+const TELEGRAM_BOT_TOKEN = 'PASTE_YOUR_BOT_TOKEN_HERE';
+const TELEGRAM_CHAT_ID   = 'PASTE_YOUR_CHAT_ID_HERE';
+
+/* ============================================
+   КАРТА (Leaflet + CartoDB Dark Matter)
+   ============================================ */
+const demoCourts = [
+  { lat: 43.2380, lng: 76.9457, type: 'court', name: 'Школа №47, двор', district: 'Алмалинский', surface: 'Хард', tags: ['Освещение', 'Сетка', 'Бесплатно'] },
+  { lat: 43.2566, lng: 76.9286, type: 'wall',  name: 'Стенка у ЦСКА',     district: 'Бостандыкский', surface: 'Бетон', tags: ['24/7', 'Бесплатно'] },
+  { lat: 43.2200, lng: 76.8519, type: 'court', name: 'Корт в парке',      district: 'Ауэзовский',  surface: 'Грунт', tags: ['Сетка', 'Бесплатно'] },
+  { lat: 43.2425, lng: 76.9550, type: 'court', name: 'Школа №120',        district: 'Медеуский',   surface: 'Синтетика', tags: ['Освещение', 'Сетка'] },
+  { lat: 43.2156, lng: 76.9450, type: 'wall',  name: 'Стенка во дворе',   district: 'Алмалинский', surface: 'Кирпич', tags: ['Бесплатно'] },
+  { lat: 43.2510, lng: 76.9100, type: 'court', name: 'Корт ЖК "Алатау"',  district: 'Бостандыкский', surface: 'Хард', tags: ['Освещение', 'Сетка'] },
+  { lat: 43.2305, lng: 76.9170, type: 'wall',  name: 'Школьная стенка',   district: 'Алмалинский', surface: 'Бетон', tags: ['Бесплатно'] },
+];
+
+function initMap() {
+  if (typeof L === 'undefined') return; // Leaflet ещё не загрузился
+
+  const map = L.map('map', {
+    center: [43.2380, 76.9290],
+    zoom: 12,
+    zoomControl: true,
+    scrollWheelZoom: false,
+    attributionControl: true
+  });
+
+  // Тёмная подложка
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap · CARTO',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
+
+  // Маркеры
+  demoCourts.forEach(c => {
+    const isWall = c.type === 'wall';
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="court-marker ${isWall ? 'wall' : ''}">${isWall ? '🧱' : '🎾'}</div>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+      popupAnchor: [0, -14]
+    });
+
+    const tagsHtml = c.tags.map(t => `<span class="popup-tag">${t}</span>`).join('');
+    const typeLabel = isWall ? 'Стенка' : 'Корт';
+
+    L.marker([c.lat, c.lng], { icon })
+      .addTo(map)
+      .bindPopup(`
+        <div class="popup-title">${c.name}</div>
+        <div class="popup-meta">${typeLabel} · ${c.surface} · ${c.district}</div>
+        <div class="popup-tags">
+          <span class="popup-tag yellow">Свободно</span>
+          ${tagsHtml}
+        </div>
+      `);
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMap);
+} else {
+  initMap();
+}
 
 /* ============================================
    STAT COUNTERS ANIMATION
@@ -1275,70 +1423,115 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.stat-number').forEach(el => observer.observe(el));
 
 /* ============================================
-   FORM HANDLER
+   FORM HANDLER → Отправка заявки в Telegram
    ============================================ */
 const form = document.getElementById('addCourtForm');
 const successBox = document.getElementById('formSuccess');
 
+// Человекочитаемые лейблы
+const TYPE_LABELS = {
+  court: '🎾 Корт',
+  wall: '🧱 Стенка',
+  both: '🎾 Корт + 🧱 стенка'
+};
+
+function escapeHtml(str) {
+  if (!str) return '—';
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function buildTelegramMessage(d) {
+  const lines = [];
+  lines.push('🎾 <b>Новая заявка на корт</b>');
+  lines.push('');
+  lines.push(`<b>Место:</b> ${escapeHtml(d.name)}`);
+  lines.push(`<b>Тип:</b> ${TYPE_LABELS[d.type] || d.type}`);
+  lines.push(`<b>Где:</b> ${escapeHtml(d.address)}`);
+
+  if (d.comment) {
+    lines.push('');
+    lines.push('<b>Комментарий:</b>');
+    lines.push(escapeHtml(d.comment));
+  }
+
+  lines.push('');
+  lines.push('━━━━━━━━━━━━━━━━━━');
+  lines.push(`<b>Прислал:</b> ${escapeHtml(d.telegram)}`);
+  lines.push(`<i>${new Date().toLocaleString('ru-RU')}</i>`);
+
+  return lines.join('\n');
+}
+
+async function sendToTelegram(messageText) {
+  // Если токен не настроен — демо-режим (для локального теста без бота)
+  if (TELEGRAM_BOT_TOKEN.startsWith('PASTE_') || TELEGRAM_CHAT_ID.startsWith('PASTE_')) {
+    console.warn('⚠️ Токен Telegram не настроен. Вставь TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID в начале <script>.');
+    console.log('Сообщение, которое было бы отправлено:\n' + messageText);
+    return { ok: true, demo: true };
+  }
+
+  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: messageText,
+      parse_mode: 'HTML',
+      disable_web_page_preview: true
+    })
+  });
+
+  const data = await response.json();
+  if (!data.ok) {
+    throw new Error(data.description || 'Ошибка Telegram API');
+  }
+  return data;
+}
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // Собираем структурированный объект — готов для API
   const formData = new FormData(form);
-  const features = Array.from(form.querySelectorAll('[name="features"]:checked')).map(el => el.value);
-
-  const newCourt = {
-    id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
-    name: formData.get('name'),
+  const courtData = {
+    name: formData.get('name')?.trim(),
     type: formData.get('type'),
-    surface: formData.get('surface') || null,
-    district: formData.get('district'),
-    city: formData.get('city') || null,
-    address: formData.get('address'),
-    lat: null,
-    lng: null,
-    features: features,
-    comment: formData.get('comment') || '',
-    status: 'pending',
-    added_by: {
-      telegram: formData.get('telegram'),
-      name: formData.get('author') || null
-    },
-    created_at: new Date().toISOString()
+    address: formData.get('address')?.trim(),
+    comment: formData.get('comment')?.trim() || '',
+    telegram: formData.get('telegram')?.trim()
   };
 
   // Валидация
-  if (!newCourt.name || !newCourt.district || !newCourt.address || !newCourt.added_by.telegram) {
+  if (!courtData.name || !courtData.address || !courtData.telegram) {
     alert('Заполни поля, помеченные *');
     return;
   }
 
-  /* В будущем сюда подключится единый API:
-     await fetch('/api/courts', {
-       method: 'POST',
-       headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify(newCourt)
-     });
-     После этого та же запись будет доступна:
-     - GET /api/courts?district=X (для сайта)
-     - бот через тот же endpoint
-     - мобильное приложение через тот же endpoint
-  */
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Отправляем...';
 
-  console.log('Court submitted for moderation:', newCourt);
+  try {
+    const message = buildTelegramMessage(courtData);
+    await sendToTelegram(message);
 
-  // UI feedback
-  form.querySelector('button[type="submit"]').textContent = '✓ Отправлено';
-  form.querySelector('button[type="submit"]').disabled = true;
-  successBox.classList.add('show');
+    submitBtn.textContent = '✓ Отправлено';
+    successBox.classList.add('show');
 
-  setTimeout(() => {
-    form.reset();
-    successBox.classList.remove('show');
-    const btn = form.querySelector('button[type="submit"]');
-    btn.textContent = 'Отправить на модерацию';
-    btn.disabled = false;
-  }, 6000);
+    setTimeout(() => {
+      form.reset();
+      successBox.classList.remove('show');
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }, 6000);
+  } catch (err) {
+    console.error('Ошибка отправки:', err);
+    submitBtn.textContent = '✗ Ошибка — попробуй ещё';
+    submitBtn.disabled = false;
+    setTimeout(() => { submitBtn.textContent = originalText; }, 3500);
+  }
 });
 
 /* ============================================
